@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+          图片预览组件的一些事一些情 - 梁超明的博客 | chaoming&#39;s Blog
+        
+    </title>
+
+    <link rel="canonical" href="http://selfcoding.cn/2017/10/17/ImagePreview组件/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/hux-blog.min.css">
+
+    <!-- Pygments Highlight CSS -->
+    <link rel="stylesheet" href="/css/highlight.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="https://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+
+    <!-- Hux Delete, sad but pending in China
+    <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/
+    css'>
+    -->
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Chaoming&#39;s Blog</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+
+                    
+
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/about/">About Me</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/archives/">Archives</a>
+                        </li>
+                        
+                    
+
+                        
+                        <li>
+                            <a href="/tags/">Tags</a>
+                        </li>
+                        
+                    
+                    
+                </ul>
+            </div>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+
+    <!-- Main Content -->
+    
+<!-- Image to hack wechat -->
+<!-- <img src="http://selfcoding.cn/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}" width="0" height="0"> -->
+
+<!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/home-bg.jpg')
+    }
+</style>
+<header class="intro-header" >
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                          <a class="tag" href="/tags/#React" title="React">React</a>
+                        
+                    </div>
+                    <h1>图片预览组件的一些事一些情</h1>
+                    <h2 class="subheading"></h2>
+                    <span class="meta">
+                        Posted by Chaoming Lueng on
+                        2017-10-17
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <h1 id="React组件设计"><a href="#React组件设计" class="headerlink" title="React组件设计"></a>React组件设计</h1><p>demo: <a href="http://gmfe.github.io/react-gm/#/doc/ImagePreview" target="_blank" rel="external">http://gmfe.github.io/react-gm/#/doc/ImagePreview</a><br>github源码: <a href="https://github.com/gmfe/react-gm/tree/master/src/component/image_preview" target="_blank" rel="external">https://github.com/gmfe/react-gm/tree/master/src/component/image_preview</a></p>
+<hr>
+<h2 id="react组件设计"><a href="#react组件设计" class="headerlink" title="react组件设计"></a>react组件设计</h2><p>按照组件的使用方式来划分,有两种方式:</p>
+<ul>
+<li><code>静态方法</code> <blockquote>
+<ul>
+<li>把组件的一系列逻辑封装成一个函数,使用时直接调用函数.</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li><code>react.Component</code> <blockquote>
+<ul>
+<li>把组件封装成component形式,如: <code>&lt;Component props /&gt;</code></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h2 id="imagePreivew组件设计思路"><a href="#imagePreivew组件设计思路" class="headerlink" title="imagePreivew组件设计思路"></a>imagePreivew组件设计思路</h2><p>以上两种设计模式,哪种适合imagePreview呢?  看以下分析</p>
+<ul>
+<li>封装成<code>Component形式</code></li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> &#123;ImagePreview&#125; <span class="keyword">from</span> <span class="string">'react-gm'</span>;</div><div class="line"></div><div class="line"><span class="comment">// 使用演示</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">example</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">    <span class="comment">// 需要状态控制浮层的显示</span></div><div class="line">    state = &#123;</div><div class="line">        showImagePreview: <span class="literal">false</span></div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">    hanleOpen() &#123;</div><div class="line">       <span class="keyword">this</span>.setState(&#123;<span class="attr">showImagePreview</span>: <span class="literal">true</span>&#125;);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    handleClose() &#123;</div><div class="line">       <span class="keyword">this</span>.setState(&#123;<span class="attr">showImagePreview</span>: <span class="literal">true</span>&#125;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    render() &#123;</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            &lt;div&gt;</div><div class="line">                &lt;img src=<span class="string">"1"</span> onClick=&#123;<span class="keyword">this</span>.handleOpen.bind(<span class="keyword">this</span>)&#125; /&gt;</div><div class="line">                &#123;<span class="comment">/* 浮层需要埋点,使用很繁琐 */</span>&#125;</div><div class="line">                &#123;<span class="keyword">this</span>.state.showImagePreview &amp;&amp; </div><div class="line">                 &lt;ImagePreview  handleClose=&#123;<span class="keyword">this</span>.handleClose.bind(<span class="keyword">this</span>/&gt;</div><div class="line">                &#125;</div><div class="line">            &lt;<span class="regexp">/div&gt;</span></div><div class="line"><span class="regexp">        )</span></div><div class="line"><span class="regexp">    &#125;</span></div><div class="line"><span class="regexp">&#125;</span></div></pre></td></tr></table></figure>
+<ul>
+<li>封装成<code>静态方法</code></li>
+</ul>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">import</span> &#123;ImagePreview&#125; <span class="keyword">from</span> <span class="string">'react-gm'</span>;</div><div class="line"></div><div class="line"><span class="comment">// 使用演示</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">example</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">    render() &#123;</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            &lt;div&gt;</div><div class="line">                &lt;img src=<span class="string">"1"</span> onClick=&#123;() =&gt; ImagePreview()&#125; /&gt;</div><div class="line">            &lt;<span class="regexp">/div&gt;</span></div><div class="line"><span class="regexp">        )</span></div><div class="line"><span class="regexp">    &#125;</span></div><div class="line"><span class="regexp">&#125;</span></div></pre></td></tr></table></figure>
+<p>对比可以看出来,组件封装成静态方法的形式,特别适用浮层类组件.   </p>
+<ul>
+<li>使得组件自己管理自己的显示状态</li>
+<li>无需埋点</li>
+</ul>
+<hr>
+<h2 id="预览大图的实现"><a href="#预览大图的实现" class="headerlink" title="预览大图的实现"></a>预览大图的实现</h2><p>实现大图居中显示有N种方法,ImagePreview实现居中使用了<code>object-fit</code></p>
+<p>* 定义: <code>object-fit</code> 只能用于『可替换元素』(replaced element) 。所谓可替换元素，是指元素的内容和表现不是由CSS控制的，独立渲染的外部元素，比如： <code>img</code>、 <code>object</code>、 <code>video</code> 和 <code>表单元素</code>，如<code>textarea</code>、 <code>input</code>，<code>audio</code> 和 <code>canvas</code>在一些特殊情况下，也可以作为可替换元素。</p>
+<p><em>注意: </em>使用<code>object-fit</code>的使用一定要设置<code>size</code>*</p>
+<p><code>object-fit</code> 有五个可选值，分别是：</p>
+<ul>
+<li><code>fill</code> 默认值。填充，可替换元素填满整个内容区域，可能会改变长宽比。</li>
+<li><code>contain</code> 包含，保持长宽比，保证可替换元素完整显示，长宽比和内容区域的长宽比不一致时，内容区域会出现空白。</li>
+<li><code>cover</code> 覆盖，保持长宽比，保证内容区域被填满，所以可替换元素可能会被切掉一部分，从而不能完整展示。</li>
+<li><code>none</code> 顾名思义，就是什么都没有啦，当然不是什么都没有啦，而且千万不要以为和<code>fill</code>是一样的！实际效果是，保持可替换元素原尺寸和比例。</li>
+<li><code>scale-down</code> 等比缩小。效果类似 <code>contain</code> 或 <code>none</code></li>
+</ul>
+<p>直观一点可以看图: <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit" target="_blank" rel="external">https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit</a></p>
+<h3 id="one-more-thing"><a href="#one-more-thing" class="headerlink" title="one more thing"></a>one more thing</h3><p>当元素被 <code>object-fit</code> 裁切的时候，你一定想知道如何控制裁切的位置。 所以, <code>object-position</code> 就是为了解决这个问题的。</p>
+<p><code>object-position</code> 不难理解，类似 background-position，不多说。</p>
+<h3 id="浏览器兼容"><a href="#浏览器兼容" class="headerlink" title="浏览器兼容"></a>浏览器兼容</h3><ul>
+<li>IE全部不支持</li>
+<li>Chrome 31+</li>
+<li>Safari 7.1+ </li>
+<li>Firefox 36+</li>
+</ul>
+<hr>
+<h2 id="scrollIntoViewIfNeeded"><a href="#scrollIntoViewIfNeeded" class="headerlink" title="scrollIntoViewIfNeeded"></a>scrollIntoViewIfNeeded</h2><p>缩略图滚动上使用<code>scrollIntoViewIfNeeded</code>,使当前图片保持在视图范围内(改变元素的scrollLeft)</p>
+<hr>
+
+
+                <hr>
+
+                
+
+                <ul class="pager">
+                    
+                        <li class="previous">
+                            <a href="/2018/01/07/2017overWatch/" data-toggle="tooltip" data-placement="top" title="2017overWatch">&larr; Previous Post</a>
+                        </li>
+                    
+                    
+                        <li class="next">
+                            <a href="/2017/09/04/缓存机制/" data-toggle="tooltip" data-placement="top" title="缓存机制">Next Post &rarr;</a>
+                        </li>
+                    
+                </ul>
+
+                
+
+                
+                <!-- disqus 评论框 start -->
+                <div class="comment">
+                    <div id="disqus_thread" class="disqus-thread"></div>
+                </div>
+                <!-- disqus 评论框 end -->
+                
+
+            </div>
+    <!-- Side Catalog Container -->
+        
+
+    <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+                       
+                          <a class="tag" href="/tags/#React" title="React">React</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+                <hr>
+                <span id="busuanzi_container_page_pv">
+                        🎾本文阅读🍉<span id="busuanzi_value_page_pv"></span>次
+                </span>
+                
+            </div>
+
+        </div>
+    </div>
+</article>
+
+
+
+
+<!-- disqus 公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = "hexo-blog";
+    var disqus_identifier = "http://selfcoding.cn/2017/10/17/ImagePreview组件/";
+    var disqus_url = "http://selfcoding.cn/2017/10/17/ImagePreview组件/";
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<!-- disqus 公共JS代码 end -->
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/chaoming56">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank" href="https://www.facebook.com/damon.liang.50">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/chaoming56">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+              
+                <p class="copyright text-muted">
+                    Copyright &copy; Chaoming&#39;s Blog 2018 
+                    <br>
+                    Theme by <a href="http://huangxuan.me">Hux</a> 
+                    <span style="display: inline-block; margin: 0 5px;">
+                        <i class="fa fa-heart"></i>
+                    </span> 
+                    🚐🚐🚛🚚🚜🚛|
+                    <span id="busuanzi_container_site_pv">
+                        🌈你是本站的第
+                        <span id="busuanzi_value_site_pv"></span>个🥕基友
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js"></script>
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- 
+     Because of the native support for backtick-style fenced code blocks 
+     right within the Markdown is landed in Github Pages, 
+     From V1.6, There is no need for Highlight.js, 
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0  
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/    
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://selfcoding.cn/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("https://cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-49627206-1';
+    var _gaDomain = ' ';
+
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    // dynamic User by Hux
+    var _baId = '4cc1f2d8f3067386cc5cdb626a202900';
+
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?" + _baId;
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- Side Catalog -->
+
+
+
+
+
+<!-- Image to hack wechat -->
+<img src="http://selfcoding.cn/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
